@@ -11,12 +11,13 @@ import os
 import sys
 
 
-def changeMDImage(inFilePath, outFilePath, isUseId=False):
+def changeMDImage(inFilePath, outFilePath, isUseId=False, encoding='utf-8'):
     """
     将markdown文件中的图片路径修改为base64编码
     :param inFilePath 输入markdown文件路径
     :param outFilePath 输出markdown文件路径
     :param isUseId 是否在markdown文件中使用id, 存放到文件最后
+    :param encoding 文件编码, 默认utf8
     :rtype: object
     """
     # 正则匹配图片tag
@@ -25,7 +26,7 @@ def changeMDImage(inFilePath, outFilePath, isUseId=False):
     imgUrlPattern = re.compile(r'\(([^\) ]*)')
     # 保存图片id的map,在最后将id写出到文件
     imgIdMap = dict()
-    with open(outFilePath, 'w+') as outFile, open(inFilePath) as inFile:
+    with open(outFilePath, 'w+', encoding=encoding) as outFile, open(inFilePath, 'r', encoding=encoding) as inFile:
         # 读取输入文件
         for line in inFile.readlines():
             search = imgTagPattern.findall(line)
@@ -73,6 +74,7 @@ def printHelp():
     -i/--in: md文件路径, 必填
     -o/--out: md输出文件路径, 默认 原文件名.md2.md
     -d/--id: 是否使用id表示, 默认不适用, 0(不使用),1(使用)
+    -e/--encoding: 文件编码, 默认utf-8
         制作者: 靖哥哥
     """)
 
@@ -84,7 +86,7 @@ def readArgs():
     """
     # 读取参数
     result = dict()
-    tmp, args = getopt.getopt(sys.argv[1:], 'i:o:d:h', ['out=', 'in=', 'id=', 'help'])
+    tmp, args = getopt.getopt(sys.argv[1:], 'i:o:d:e:h', ['encoding=', 'out=', 'in=', 'id=', 'help'])
     # 读取参数
     for comm in tmp:
         # 帮助文档
@@ -96,6 +98,8 @@ def readArgs():
             result['out'] = comm[1]
         elif comm[0] == '-d' or comm[0] == '--id':
             result['id'] = comm[1]
+        elif comm[0] == '-e' or comm[0] == '--encoding':
+            result['encoding'] = comm[1]
     return result
 
 
@@ -112,10 +116,12 @@ if __name__ == '__main__':
     if not params or params.get('help') or not params.get('in'):
         printHelp()
         exit()
+    # 设置默认参数
+    params['out'] = params['out'] if params.get('out') else str(params['in'])+'2.md'
+    params['encoding'] = params['encoding'] if params.get('encoding') else 'utf-8'
+    params['id'] = params['id'] if params.get('id') else False
     # 处理文件
-    outFilePath = params['out'] if params.get('out') else str(params['in'])+'2.md'
-    changeMDImage(params['in'], outFilePath,
-                  params['id'] if params.get('id') else False)
+    changeMDImage(params['in'], params['out'], params['id'], params['encoding'])
     print('成功处理文件: ' + params['in'])
-    print('处理后的文件为: ' + outFilePath)
+    print('处理后的文件为: ' + params['out'])
 
