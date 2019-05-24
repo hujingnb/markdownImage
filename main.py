@@ -1,3 +1,5 @@
+#!/usr/bin/python
+#-*- coding: UTF-8 -*-
 """
 Created on 2019/5/18 19:12
 将markdown文件中的图片转换成 base64编码
@@ -44,9 +46,11 @@ def changeMDImage(inFilePath, outFilePath, isUseId=False, encoding='utf-8'):
                 url = url.group(1)
                 # 若路径是相对路径,将路径与md文件目录拼接
                 if not os.path.isabs(url):
-                    url = os.path.join(os.path.dirname(inFilePath), url)
+                    absUrl = os.path.join(os.path.dirname(inFilePath), url)
+                else:
+                    absUrl = url
                 # 获取图片的base64
-                imgBase64 = ImageBase64.base64Img(url)
+                imgBase64 = ImageBase64.base64Img(absUrl)
                 # 将图片base64直接放到标签中
                 if not isUseId:
                     # 将base64转到图片标签中
