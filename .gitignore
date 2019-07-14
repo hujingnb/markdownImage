@@ -1,4 +1,4 @@
 .idea
 *.pyc
-env3
-env2
+venv3
+venv2
