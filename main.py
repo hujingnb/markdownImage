@@ -104,6 +104,13 @@ def readArgs():
 
 
 if __name__ == '__main__':
+    # Python2显示升级提示
+    if sys.version < '3':
+        print("""
+抱歉, 暂不支持Python2
+    请升级Python版本后重试
+        """)
+        exit()
     # 读取参数
     params = None
     try:
