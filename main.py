@@ -31,25 +31,27 @@ def dispose_image_to_base64(file_path, content, is_use_id):
     # 遍历处理每一个图片内容
     for each in search:
         # 拿到图片url
-        url = img_url_pattern.search(each)
+        img_url_word = img_url_pattern.search(each)
         # 若没有匹配到, 跳过
-        if not url:
+        if not img_url_word:
             continue
-        url = url.group(1)
+        img_url_word = img_url_word.group(1)
         # 若路径是相对路径,将路径与md文件目录拼接
-        if not os.path.isabs(url):
-            url = os.path.join(os.path.dirname(file_path), url)
+        if not os.path.isabs(img_url_word):
+            img_url = os.path.join(os.path.dirname(file_path), img_url_word)
+        else:
+            img_url = img_url_word
         # 获取图片的base64
-        img_base64 = ImageBase64.base64_img(url)
+        img_base64 = ImageBase64.base64_img(img_url)
         # 将图片base64直接放到标签中
         if not is_use_id:
             # 将base64转到图片标签中
-            content = content.replace(url, img_base64)
+            content = content.replace(img_url_word, img_base64)
         # 将图片标签中存放id, id放到文件最后
         else:
             img_id = str(uuid.uuid1())
             img_id_map[img_id] = img_base64
-            content = content.replace('(' + url + ')', '[' + img_id + ']')
+            content = content.replace('(' + img_url_word + ')', '[' + img_id + ']')
     return content, img_id_map
 
 
