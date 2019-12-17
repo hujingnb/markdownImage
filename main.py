@@ -11,59 +11,60 @@ import os
 import sys
 
 
-def changeMDImage(inFilePath, outFilePath, isUseId=False, encoding='utf-8'):
+def change_md_image(in_file_path, out_file_path, is_use_id=False, encoding='utf-8'):
     """
     将markdown文件中的图片路径修改为base64编码
-    :param inFilePath 输入markdown文件路径
-    :param outFilePath 输出markdown文件路径
-    :param isUseId 是否在markdown文件中使用id, 存放到文件最后
+    :param in_file_path 输入markdown文件路径
+    :param out_file_path 输出markdown文件路径
+    :param is_use_id 是否在markdown文件中使用id, 存放到文件最后
     :param encoding 文件编码, 默认utf8
     :rtype: object
     """
     # 正则匹配图片tag
-    imgTagPattern = re.compile(r'!\[[\w\d]*\]\([^\(\)]*\)')
+    img_tag_pattern = re.compile(r'!\[[\w\d]*\]\([^\(\)]*\)')
     # 正则匹配图片标签中的图片url
-    imgUrlPattern = re.compile(r'\(([^\) ]*)')
+    img_url_pattern = re.compile(r'\(([^\) ]*)')
     # 保存图片id的map,在最后将id写出到文件
-    imgIdMap = dict()
-    with open(outFilePath, 'w+', encoding=encoding) as outFile, open(inFilePath, 'r', encoding=encoding) as inFile:
+    img_id_map = dict()
+    with open(out_file_path, 'w+', encoding=encoding) as out_file, \
+            open(in_file_path, 'r', encoding=encoding) as in_file:
         # 读取输入文件
-        for line in inFile.readlines():
-            search = imgTagPattern.findall(line)
+        for line in in_file.readlines():
+            search = img_tag_pattern.findall(line)
             # 不存在图片标签
             if not search:
-                outFile.write(line)
+                out_file.write(line)
                 continue
             # 遍历处理每一个图片内容
             for each in search:
                 # 拿到图片url
-                url = imgUrlPattern.search(each)
+                url = img_url_pattern.search(each)
                 # 若没有匹配到, 跳过
                 if not url:
                     continue
                 url = url.group(1)
                 # 若路径是相对路径,将路径与md文件目录拼接
                 if not os.path.isabs(url):
-                    url = os.path.join(os.path.dirname(inFilePath), url)
+                    url = os.path.join(os.path.dirname(in_file_path), url)
                 # 获取图片的base64
-                imgBase64 = ImageBase64.base64Img(url)
+                img_base64 = ImageBase64.base64_img(url)
                 # 将图片base64直接放到标签中
-                if not isUseId:
+                if not is_use_id:
                     # 将base64转到图片标签中
-                    line = line.replace(url, imgBase64)
+                    line = line.replace(url, img_base64)
                 # 将图片标签中存放id, id放到文件最后
                 else:
-                    imgId = str(uuid.uuid1())
-                    imgIdMap[imgId] = imgBase64
-                    line = line.replace('(' + url + ')', '[' + imgId + ']')
+                    img_id = str(uuid.uuid1())
+                    img_id_map[img_id] = img_base64
+                    line = line.replace('(' + url + ')', '[' + img_id + ']')
             # 写入输出文件
-            outFile.write(line)
+            out_file.write(line)
         # 遍历完成, 将id写入文件最后
-        for key, value in imgIdMap.items():
-            outFile.write('\n\n' + '[' + key + ']:' + value)
+        for key, value in img_id_map.items():
+            out_file.write('\n\n' + '[' + key + ']:' + value)
 
 
-def printHelp():
+def print_help():
     """
     输出帮助文档
     :rtype: object
@@ -79,7 +80,7 @@ def printHelp():
     """)
 
 
-def readArgs():
+def read_args():
     """
     读取命令行参数
     :return 参数map
@@ -114,21 +115,20 @@ if __name__ == '__main__':
     # 读取参数
     params = None
     try:
-        params = readArgs()
+        params = read_args()
     except getopt.GetoptError as e:
         # 出错了, 显示提示文档
-        printHelp()
+        print_help()
         exit()
     # 是否显示帮助文档
     if not params or params.get('help') or not params.get('in'):
-        printHelp()
+        print_help()
         exit()
     # 设置默认参数
     params['out'] = params['out'] if params.get('out') else str(params['in'])+'2.md'
     params['encoding'] = params['encoding'] if params.get('encoding') else 'utf-8'
     params['id'] = params['id'] if params.get('id') else False
     # 处理文件
-    changeMDImage(params['in'], params['out'], params['id'], params['encoding'])
+    change_md_image(params['in'], params['out'], params['id'], params['encoding'])
     print('成功处理文件: ' + params['in'])
     print('处理后的文件为: ' + params['out'])
-
