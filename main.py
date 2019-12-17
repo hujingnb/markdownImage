@@ -50,7 +50,7 @@ def dispose_image_to_base64(file_path, content, is_use_id):
             img_id = str(uuid.uuid1())
             img_id_map[img_id] = img_base64
             content = content.replace('(' + url + ')', '[' + img_id + ']')
-    return content,img_id_map
+    return content, img_id_map
 
 
 def change_md_image(in_file_path, out_file_path, is_use_id=False, encoding='utf-8'):
