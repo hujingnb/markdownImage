@@ -20,7 +20,7 @@ def dispose_image_to_base64(file_path, content, is_use_id):
     :return:
     """
     # 正则匹配图片tag
-    img_tag_pattern = re.compile(r'!\[[\w\d]*\]\([^\(\)]*\)')
+    img_tag_pattern = re.compile(r'!\[[\w\d-]*\]\([^\(\)]*\)')
     # 正则匹配图片标签中的图片url
     img_url_pattern = re.compile(r'\(([^\) ]*)')
     search = img_tag_pattern.findall(content)
