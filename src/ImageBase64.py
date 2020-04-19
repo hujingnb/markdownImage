@@ -47,7 +47,7 @@ class ImageBase64:
             'jpeg': 'data:image/jpeg;base64,',
             'png': 'data:image/png;base64,',
         }
-        return img_type_map[img_type]
+        return img_type_map[img_type.lower()]
 
     @classmethod
     def base64_img(cls, img_path):

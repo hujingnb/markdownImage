@@ -20,9 +20,9 @@ def dispose_image_to_base64(file_path, content, is_use_id):
     :return:
     """
     # 正则匹配图片tag
-    img_tag_pattern = re.compile(r'!\[[\w\d-]*\]\([^\(\)]*\)')
+    img_tag_pattern = re.compile(r'!\[[^\]]*\]\([^\(\)]*\)')
     # 正则匹配图片标签中的图片url
-    img_url_pattern = re.compile(r'\(([^\) ]*)')
+    img_url_pattern = re.compile(r'\(([^\)]*)')
     search = img_tag_pattern.findall(content)
     # 不存在图片标签
     if not search:
@@ -76,7 +76,7 @@ def change_md_image(in_file_path, out_file_path, is_use_id=False, encoding='utf-
             out_file.write(line)
         # 遍历完成, 将id写入文件最后
         for key, value in img_id_map.items():
-            out_file.write('\n\n' + '[' + key + ']:' + value)
+            out_file.write(os.linesep + '[' + key + ']:' + value+ os.linesep)
 
 
 def print_help():
