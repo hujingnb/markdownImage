@@ -1,5 +1,6 @@
 certifi==2019.6.16
 chardet==3.0.4
+configparser==5.0.0
 idna==2.8
 requests==2.22.0
 tinify==1.5.1
