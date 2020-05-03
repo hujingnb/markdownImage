@@ -3,6 +3,7 @@ Created on 2019/5/18 19:06
 对图片进行压缩处理
 @author: hujing
 """
+from .Config import Config, ConfigName
 
 
 class ImageCompress:
@@ -13,20 +14,21 @@ class ImageCompress:
         返回压缩后的文件内容
         若失败,返回False
     """
+
     @classmethod
-    def compressTinypng(cls, filePath):
+    def compress_tiny_png(cls, file_path):
         """
         使用tinypng对图片进行压缩
-        :param filePath 待压缩的文件路径
+        :param file_path 待压缩的文件路径
         :rtype: 压缩后的文件内容
         """
         try:
             import tinify
-            tinify.key = 'J2N7fcrkRwEdPe2LEjfOS6dINwTOeLJj'
-            with open(filePath, 'rb') as f:
+            tinify.key = Config.get_compress_config(ConfigName.COMPRESS_TINIFY_KEY)
+            with open(file_path, 'rb') as f:
                 buffer = f.read()
                 result = tinify.from_buffer(buffer).to_buffer()
-                print('成功压缩图片: ' + filePath)
+                print('成功压缩图片: ' + file_path)
                 return result
         except Exception as e:
             return False
