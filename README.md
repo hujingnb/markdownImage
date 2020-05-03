@@ -1,6 +1,6 @@
 本项目已经不再更新, 之后只维护码云上的项目, 因为访问太慢了, 如果需要的可以直接到码云down下来使用, 随便用哦
 
-码云链接: [https://gitee.com/hujingnb/markdownImage](https://gitee.com/hujingnb/markdownImage)
+码云链接: [markDownImage](https://gitee.com/hujingnb/markdownImage)
 
 将markdown文件中的图片转换成base64编码
 
