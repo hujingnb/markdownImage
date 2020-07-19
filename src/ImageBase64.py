@@ -32,6 +32,7 @@ class ImageBase64:
         for fun in fun_list:
             r = methodcaller(fun, img_file_path)(ImageCompress)
             if r:
+                print(fun + ' 成功压缩图片: ' + img_file_path)
                 return r
         return ''
 

@@ -9,6 +9,8 @@ import os
 class ConfigName:
     IMAGE_COMPRESS = 'image_compress'
     COMPRESS_TINIFY_KEY = 'tinify_key'
+    COMPRESS_KRAKEN_KEY = 'kraken_key'
+    COMPRESS_KRAKEN_SECRET = 'kraken_secret'
 
 
 class Config:
@@ -21,7 +23,6 @@ class Config:
         :return:
         """
         return cls._get_config_instance().get(ConfigName.IMAGE_COMPRESS, config_name)
-        pass
 
     _config = None
 
