@@ -16,8 +16,9 @@ class Args:
         self.in_file = None
         self.out_file = None
         self.use_id = False
+        self.debug = False
         self.encoding = 'utf-8'
-        tmp, args = getopt.getopt(sys.argv[1:], 'i:o:d:e:h', ['encoding=', 'out=', 'in=', 'id=', 'help'])
+        tmp, args = getopt.getopt(sys.argv[1:], 'i:o:d:e:h', ['encoding=', 'out=', 'in=', 'id=', 'help', 'debug'])
         # 读取参数
         for comm in tmp:
             # 帮助文档
@@ -31,6 +32,8 @@ class Args:
                 self.use_id = comm[1]
             elif comm[0] == '-e' or comm[0] == '--encoding':
                 self.encoding = comm[1]
+            elif comm[0] == '--debug':
+                self.debug = True
         # 设置默认参数
         self.out_file = self.out_file if self.out_file else str(self.in_file) + '2.md'
 
@@ -57,6 +60,8 @@ class Args:
     -o/--out: md输出文件路径, 默认 原文件名.md2.md
     -d/--id: 是否使用id表示, 默认不适用, 0(不使用),1(使用)
     -e/--encoding: 文件编码, 默认utf-8
+    --debug: 是否启动调试模式. 默认不启用
+            启动调试模式后, 会显示一些用于调试的错误信息. 如图片压缩失败后的错误信息等
         制作者: 靖哥哥
         """)
         exit()

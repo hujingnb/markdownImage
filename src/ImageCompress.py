@@ -6,6 +6,7 @@ Created on 2019/5/18 19:06
 import requests
 
 from .Config import Config, ConfigName
+from .Util import print_debug_info
 
 
 class ImageCompress:
@@ -28,6 +29,7 @@ class ImageCompress:
             import tinify
             key = Config.get_compress_config(ConfigName.COMPRESS_TINIFY_KEY)
             if not key:
+                print_debug_info("未配置 tiny ")
                 return False
             tinify.key = key
             with open(file_path, 'rb') as f:
@@ -35,6 +37,7 @@ class ImageCompress:
                 result = tinify.from_buffer(buffer).to_buffer()
                 return result
         except Exception as e:
+            print_debug_info(e)
             return False
 
     @classmethod
@@ -49,6 +52,7 @@ class ImageCompress:
             key = Config.get_compress_config(ConfigName.COMPRESS_KRAKEN_KEY)
             secret = Config.get_compress_config(ConfigName.COMPRESS_KRAKEN_SECRET)
             if not key or not secret:
+                print_debug_info("未配置 krakenio ")
                 return False
             api = Client(key, secret)
             data = {
@@ -61,6 +65,8 @@ class ImageCompress:
                 if response.status_code == 200:
                     return response.content
             else:
+                print_debug_info(result)
                 return False
         except Exception as e:
+            print_debug_info(e)
             return False
