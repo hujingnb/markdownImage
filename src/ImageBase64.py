@@ -1,6 +1,5 @@
 """
 Created on 2019/5/18 19:07
-时间处理的工具
 @author: hujing
 """
 from operator import methodcaller

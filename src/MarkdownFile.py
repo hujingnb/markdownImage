@@ -54,7 +54,7 @@ class MarkdownFile:
         content, tmp_id_map = MarkdownFile.change_img_to_base_64(img_tag_pattern, img_url_pattern,
                                                                  content, file_path, arg.use_id)
         img_id_map.update(tmp_id_map)
-        # todo img 标签暂时不支持使用图片 ID 的形式
+        # img 标签暂时不支持使用图片 ID 的形式. 因此, 即使参数指定使用 ID, 也不使用, 否则无法识别
         content, _ = MarkdownFile.change_img_to_base_64(img_size_tag_pattern, img_size_url_pattern, content, file_path)
         return content, img_id_map
 
